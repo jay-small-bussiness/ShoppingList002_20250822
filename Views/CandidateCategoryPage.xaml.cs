@@ -2,6 +2,7 @@ using Microsoft.Maui.Controls;
 using ShoppingList002.ViewModels;
 using ShoppingList002.Services.Converters;
 using ShoppingList002.Models.UiModels;
+using CommunityToolkit.Maui.Views;
 namespace ShoppingList002.Views;
 [QueryProperty(nameof(CategoryId), "CategoryId")]
 [QueryProperty(nameof(CategoryTitle), "CategoryTitle")]
@@ -25,11 +26,17 @@ public partial class CandidateCategoryPage : ContentPage
         // ↓ここでイベントデリゲート登録するんや
         viewModel.ShowPopupRequested = async category =>
         {
-            var popupVm = new EditCategoryPopupViewModel(async updated =>
-            {
-                var dbModel = CandidateCategoryModelConverter.ToDbModel(updated);
-                await viewModel.UpdateCategoryAsync(dbModel);
-            });
+            var popupVm = new EditCategoryPopupViewModel(
+                null,               // 編集対象なし（新規追加なら null）
+                viewModel.AvailableColors, // ここを追加
+                async updated =>
+                {
+                    if (updated != null)
+                    {
+                        var dbModel = CandidateCategoryModelConverter.ToDbModel(updated);
+                        await viewModel.UpdateCategoryAsync(dbModel);
+                    }
+                });
 
 
             popupVm.Initialize(
@@ -53,7 +60,7 @@ public partial class CandidateCategoryPage : ContentPage
                     //await viewModel.UpdateCategoryAsync(dbModel); // VM側にUpdate処理もってるならここ
                 });
             var popupPage = new EditCategoryPopupPage(popupVm);
-            await Navigation.PushModalAsync(popupPage);
+            var result = await Application.Current.MainPage.ShowPopupAsync(popupPage);
         };
         viewModel.IsEditMode = false;
         _ = viewModel.InitializeAsync(); // ←ここで呼ぶ！

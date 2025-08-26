@@ -26,7 +26,7 @@
             <Button Text="{Binding EditButtonText}"
                 Grid.Column="2"
                 Command="{Binding ToggleEditModeCommand}"
-                WidthRequest="150"
+                WidthRequest="180"
                 FontSize="16"
                 Padding="6,2"
                 HorizontalOptions="End"

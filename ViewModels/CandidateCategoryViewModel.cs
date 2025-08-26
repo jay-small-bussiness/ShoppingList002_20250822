@@ -48,7 +48,7 @@ namespace ShoppingList002.ViewModels
         {
             _candidateService = candidateService;
             _serviceProvider = serviceProvider;
-            AddNewCategoryCommand = new RelayCommand(AddNewCategory);
+            AddNewCategoryCommand = new AsyncRelayCommand(AddNewCategoryAsync);
 
             CategoryTappedCommand = new RelayCommand<CandidateCategoryUiModel>(async category =>
             {
@@ -76,7 +76,8 @@ namespace ShoppingList002.ViewModels
 
                 if (action == "名前・色を編集")
                 {
-                    ShowPopupRequested.Invoke(category);
+                    //ShowPopupRequested.Invoke(category);
+                    await EditCategoryAsync(category);
                 }
                 else if (action == "カテゴリを削除")
                 {
@@ -98,11 +99,50 @@ namespace ShoppingList002.ViewModels
             MoveItemUpCommand = new Command<CandidateCategoryUiModel>(MoveItemUp);
             MoveItemDownCommand = new Command<CandidateCategoryUiModel>(MoveItemDown);
         }
-        private void AddNewCategory()
+        private async Task AddNewCategoryAsync()
         {
-            ShowPopupRequested?.Invoke(null); // nullで新規追加扱い
-        }
+            var popupVm = new EditCategoryPopupViewModel(
+                null,
+                AvailableColors,
+                async newCategory =>
+                {
+                    if (newCategory != null)
+                    {
+                        var dbModel = CandidateCategoryModelConverter.ToDbModel(newCategory);
+                        await _candidateService.InsertCategoryAsync(dbModel);
+                    }
+                });
 
+            var popup = new EditCategoryPopupPage(popupVm);
+            var result = await Application.Current.MainPage.ShowPopupAsync(popup);
+
+            if (result is CandidateCategoryUiModel newCategory)
+            {
+                var dbModel = CandidateCategoryModelConverter.ToDbModel(newCategory);
+                await _candidateService.InsertCategoryAsync(dbModel);
+            }
+        }
+        //private void AddNewCategory()
+        //{
+        //    ShowPopupRequested?.Invoke(null); // nullで新規追加扱い
+        //}
+        private async Task EditCategoryAsync(CandidateCategoryUiModel category)
+        {
+            var popupVm = new EditCategoryPopupViewModel(
+             category,
+             AvailableColors,
+             async updated =>
+             {
+                 if (updated != null)
+                 {
+                     var dbModel = CandidateCategoryModelConverter.ToDbModel(updated);
+                     await _candidateService.UpdateCategoryAsync(dbModel);
+                 }
+             });
+
+            var popup = new EditCategoryPopupPage(popupVm);
+            var result = await Application.Current.MainPage.ShowPopupAsync(popup);
+        }
         //private async Task ShowEditCategoryPopup(CandidateCategoryUiModel category)
         //{
         //    await ShowPopupRequested.Invoke(category);

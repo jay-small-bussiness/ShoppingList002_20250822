@@ -12,7 +12,7 @@
 namespace ShoppingList002.Views
 {
 	[global::Microsoft.Maui.Controls.Xaml.XamlFilePath("Views\\EditCategoryPopupPage.xaml")]
-	public partial class EditCategoryPopupPage : global::Microsoft.Maui.Controls.ContentPage
+	public partial class EditCategoryPopupPage : global::CommunityToolkit.Maui.Views.Popup
 	{
 		[global::System.CodeDom.Compiler.GeneratedCode("Microsoft.Maui.Controls.SourceGen", "1.0.0.0")]
 		private global::Microsoft.Maui.Controls.CollectionView CollectionViewName;

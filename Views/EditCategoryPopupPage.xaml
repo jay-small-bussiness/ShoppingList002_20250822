@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
+<toolkit:Popup
     x:Class="ShoppingList002.Views.EditCategoryPopupPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewmodels="clr-namespace:ShoppingList002.ViewModels"
+
     xmlns:models="clr-namespace:ShoppingList002.Models.UiModels">
     <VerticalStackLayout Spacing="15">
         <Label Text="アイコン" FontSize="16" TextColor="SaddleBrown"/>
@@ -12,18 +14,51 @@
                TextColor="DarkBlue"
                FontSize="20"/>
         <Label Text="カテゴリ名" FontSize="16" TextColor="SaddleBrown"/>
-        <Entry Text="{Binding EditingTitle}" 
+        <Entry Text="{Binding CategoryName}" 
                Placeholder="カテゴリ名" 
                TextColor="DarkBlue"
                FontSize="20"/>
 
         <Label Text="色を選択" FontSize="16" TextColor="SaddleBrown"/>
-        <CollectionView
-            x:Name="CollectionViewName"
-            ItemsSource="{Binding ColorOptions}"
+        <!--<CollectionView
+            ItemsSource="{Binding Colors}"
             SelectionMode="Single"
             SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
-            SelectionChanged="OnColorSelected">  
+            SelectionChanged="OnColorSelected">
+
+            <CollectionView.ItemsLayout>
+                --><!-- 3列で並べる --><!--
+                <GridItemsLayout Orientation="Vertical" Span="3" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="5" Margin="5" BorderColor="LightGray" HasShadow="False">
+                        <BoxView
+                    HeightRequest="60"
+                    WidthRequest="60"
+                    Color="{Binding ColorValue}">
+                            <BoxView.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:EditCategoryPopupViewModel}}, Path=ColorTappedCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </BoxView.GestureRecognizers>
+                        </BoxView>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>-->
+
+
+        <CollectionView
+            x:Name="CollectionViewName"
+            ItemsSource="{Binding Colors}"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
+            SelectionChanged="OnColorSelected">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="3" />
+            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame Padding="22" Margin="2"
@@ -36,8 +71,8 @@
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:EditCategoryPopupViewModel}}, 
                                 Path=ColorTappedCommand}" CommandParameter="{Binding .}" />
                         </Frame.GestureRecognizers>
-                        <!--<Label Text="{Binding Name}" HorizontalOptions="Center" VerticalOptions="Center" />-->
-                        <Frame.Triggers>
+                        <Label Text="{Binding Name2}" HorizontalOptions="Center" VerticalOptions="Center" />
+                        <!--<Frame.Triggers>
                             <DataTrigger TargetType="Frame"
                                  Binding="{Binding ., Mode=OneWay, 
                                     Converter={StaticResource SelectedItemEqualityConverter}, 
@@ -45,7 +80,7 @@
                                  Value="True">
                                 <Setter Property="BorderColor" Value="Red" />
                             </DataTrigger>
-                        </Frame.Triggers>
+                        </Frame.Triggers>-->
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
@@ -72,4 +107,4 @@
 
         </HorizontalStackLayout>
     </VerticalStackLayout>
-</ContentPage>
+</toolkit:Popup>
