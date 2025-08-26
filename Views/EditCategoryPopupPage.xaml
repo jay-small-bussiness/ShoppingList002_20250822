@@ -54,8 +54,8 @@
             x:Name="CollectionViewName"
             ItemsSource="{Binding Colors}"
             SelectionMode="Single"
-            SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
-            SelectionChanged="OnColorSelected">
+            SelectedItem="{Binding SelectedColor, Mode=TwoWay}">
+            <!--SelectionChanged="OnColorSelected">-->
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="3" />
             </CollectionView.ItemsLayout>

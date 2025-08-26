@@ -1,6 +1,8 @@
 using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.Input;
 using ShoppingList002.Models.UiModels;
 using ShoppingList002.ViewModels;
+using System.Windows.Input;
 
 namespace ShoppingList002.Views;
 
@@ -9,7 +11,7 @@ public partial class EditCategoryPopupPage : Popup
 {
     private readonly IServiceProvider _serviceProvider;
     private TaskCompletionSource<CandidateCategoryUiModel?> _taskSource = new();
-    
+
     public EditCategoryPopupPage(EditCategoryPopupViewModel vm)
     {
         InitializeComponent();
@@ -30,16 +32,16 @@ public partial class EditCategoryPopupPage : Popup
     //    }
     //}
 
-    private void OnColorSelected(object sender, SelectionChangedEventArgs e)
-    {
-        if (e.CurrentSelection?.FirstOrDefault() is ColorUiModel selected)
-        {
-            if (BindingContext is EditCategoryPopupViewModel vm)
-            {
-                vm.SelectedColor = selected;
-            }
-        }
-    }
+    //private void OnColorSelected(object sender, SelectionChangedEventArgs e)
+    //{
+    //    if (e.CurrentSelection?.FirstOrDefault() is ColorUiModel selected)
+    //    {
+    //        if (BindingContext is EditCategoryPopupViewModel vm)
+    //        {
+    //            vm.SelectedColor = selected;
+    //        }
+    //    }
+    //}
 
     private void OnSaveClicked(object sender, EventArgs e)
     {

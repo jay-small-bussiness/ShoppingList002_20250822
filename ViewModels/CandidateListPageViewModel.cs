@@ -28,7 +28,12 @@ namespace ShoppingList002.ViewModels
         private string categoryTitleWithEmoji;
         [ObservableProperty]
         private int colorId;
-
+        private ColorUiModel? _selectedColor;
+        public ColorUiModel? SelectedColor
+        {
+            get => _selectedColor;
+            set => SetProperty(ref _selectedColor, value);
+        }
         private bool _isRefreshing = false;
         private readonly ICandidateService _candidateService;
         private readonly IShoppingListService _shoppingListService;
@@ -42,6 +47,10 @@ namespace ShoppingList002.ViewModels
         public IRelayCommand<CandidateListItemUiModel> MoveItemUpCommand { get; }
         public IRelayCommand<CandidateListItemUiModel> MoveItemDownCommand { get; }
         public IRelayCommand<CandidateListItemUiModel> ShowItemMenuCommand { get; }
+        public ICommand ColorTappedCommand => new RelayCommand<ColorUiModel>(c =>
+        {
+            SelectedColor = c;
+        });
 
         public string EditButtonText => IsEditMode ? "🛑 編集モード終了" : "✏️ 編集モードへ";
         public int CategoryID;
